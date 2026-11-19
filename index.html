@@ -298,6 +298,21 @@ details p { padding-bottom: 18px; color: var(--muted); }
 .r1 { left: 11.6%; top: 58.4%; width: 76.6%; height: 3.2%; }
 .r2 { left: 11.6%; top: 81.8%; width: 66%; height: 3.2%; }
 
+/* Product video */
+.video-sec { padding-block: 24px 88px; }
+.video-sec .sec-head { text-align: center; margin-inline: auto; justify-items: center; margin-bottom: 32px; }
+.vid-frame { position: relative; max-width: 1100px; margin: 0 auto; border-radius: 24px; overflow: hidden; background: #F5F4FA; border: 1px solid var(--line); box-shadow: 0 2px 4px rgba(23,20,43,.06), 0 40px 80px -30px rgba(91,61,224,.35); }
+.vid { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.vid-mob { display: none; aspect-ratio: 9 / 16; }
+.vid-toggle { position: absolute; right: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 10px 16px; font: 600 .88rem var(--f-body); color: #FFFFFF; background: rgba(23,20,43,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); cursor: pointer; }
+.vid-toggle:hover { background: rgba(23,20,43,.88); }
+@media (max-width: 640px) {
+  .video-sec { padding-block: 8px 64px; }
+  .vid-frame { max-width: 400px; border-radius: 22px; }
+  .vid-desk { display: none; }
+  .vid-mob { display: block; }
+}
+
 /* Final CTA */
 .final { background: var(--ink); color: var(--bg); border-radius: 26px; padding: 56px 40px; display: grid; gap: 22px; justify-items: start; position: relative; overflow: hidden; }
 .final h2 { max-width: 18ch; }
@@ -379,7 +394,7 @@ footer a:hover { color: var(--ink); }
       <p class="lead">Kaun time pe aaya, kaun leave pe hai, kisko kitni salary deni hai: sab aapke phone pe. WhatsApp pe leave aur month end ka hisaab ab nahi.</p>
       <div class="hero-ctas">
         <a class="btn btn-primary" href="https://dune.dyzo.ai/register">Free try karo →</a>
-        <a class="btn btn-ghost" href="#how">Kaise kaam karta hai</a>
+        <a class="btn btn-ghost" href="#video">Kaise kaam karta hai</a>
       </div>
       <div class="hero-note">
         <span>Credit card nahi chahiye</span>
@@ -421,6 +436,21 @@ footer a:hover { color: var(--ink); }
         <b>Pooja · Short Leave · Kal 4–6 PM</b>
         <div class="acts"><span class="a-yes">Approve</span><span class="a-no">Reject</span></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT VIDEO -->
+<section class="video-sec" id="video">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Video dekho</span>
+      <h2>40 second mein dekho <span class="brand">DUNE</span> kaise kaam karta hai</h2>
+    </div>
+    <div class="vid-frame">
+      <video class="vid vid-desk" muted loop playsinline preload="none" poster="videos/web/poster-16x9.jpg" data-src="videos/web/dune-16x9.mp4" width="1600" height="900" aria-label="DUNE ka product video: check-in, leave approval, live dashboard aur month-end report"></video>
+      <video class="vid vid-mob" muted loop playsinline preload="none" poster="videos/web/poster-9x16.jpg" data-src="videos/web/dune-9x16.mp4" width="720" height="1280" aria-label="DUNE ka product video: check-in, leave approval, live dashboard aur month-end report"></video>
+      <button class="vid-toggle" id="vid-toggle" type="button" aria-label="Video roko" data-pause="Pause" data-play="Play" data-pause-label="Video roko" data-play-label="Video chalao">❚❚ Pause</button>
     </div>
   </div>
 </section>
@@ -759,5 +789,45 @@ footer a:hover { color: var(--ink); }
 
 <div class="m-cta"><a class="btn btn-primary" href="https://dune.dyzo.ai/register">Free try karo →</a></div>
 
+<script>
+(function () {
+  var frame = document.querySelector('.vid-frame');
+  var btn = document.getElementById('vid-toggle');
+  if (!frame || !btn) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var userPaused = reduce;
+  function current() {
+    var vids = frame.querySelectorAll('video');
+    for (var i = 0; i < vids.length; i++) if (vids[i].offsetParent !== null) return vids[i];
+    return vids[0];
+  }
+  function setBtn(playing) {
+    btn.textContent = playing ? '❚❚ ' + btn.dataset.pause : '▶ ' + btn.dataset.play;
+    btn.setAttribute('aria-label', playing ? btn.dataset.pauseLabel : btn.dataset.playLabel);
+  }
+  function play() {
+    var v = current();
+    frame.querySelectorAll('video').forEach(function (o) { if (o !== v) o.pause(); });
+    if (!v.src) { v.src = v.dataset.src; }
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { setBtn(false); });
+    setBtn(true);
+  }
+  function pause() { frame.querySelectorAll('video').forEach(function (v) { v.pause(); }); setBtn(false); }
+  setBtn(!reduce);
+  btn.addEventListener('click', function () {
+    if (current().paused) { userPaused = false; play(); } else { userPaused = true; pause(); }
+  });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && !userPaused) play();
+        else if (!e.isIntersecting) { frame.querySelectorAll('video').forEach(function (v) { v.pause(); }); }
+      });
+    }, { threshold: 0.35 }).observe(frame);
+  } else if (!reduce) { play(); }
+  window.matchMedia('(max-width: 640px)').addEventListener('change', function () { if (!userPaused) play(); });
+})();
+</script>
 </body>
 </html>

@@ -20,6 +20,8 @@ Rendered MP4s are in `videos/`:
 - `dune-product-video-16x9.mp4`: 1920×1080, 30fps, 41.5s
 - `dune-product-video-9x16.mp4`: 1080×1920, 30fps, 41.5s
 
+Light web copies used on the landing pages are in `videos/web/` (1.6 MB and 1.3 MB, no audio) with poster images. The page shows the 16:9 video on desktop and the 9:16 video on phones (640px and below). A video loads only when its section scrolls into view, plays muted on a loop, and pauses when scrolled away. Visitors with reduced motion turned on get the poster and a Play button.
+
 ## Re-rendering a video
 
 Needs Google Chrome and ffmpeg (`brew install ffmpeg`).
