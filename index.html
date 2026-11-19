@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="hi-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="alternate" hreflang="en" href="en.html">
+<title>DUNE Office Attendance</title>
+<meta name="description" content="10–50 logon ke office ke liye attendance, leave aur salary ek app mein. Register aur WhatsApp ka jhanjhat khatam. Free try karo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Kalam:wght@400;700&display=swap">
+<style>
+/* Layout: one reading column (1300px) of alternating bands; each pain gets a "register vs Dune" pair, the hero shows today's attendance as the product does. */
+:root {
+  --bg: #F7F6FB;
+  --surface: #FFFFFF;
+  --ink: #17142B;
+  --muted: #5D5878;
+  --line: #E3E0EF;
+  --accent: #5B3DE0;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #ECE8FD;
+  --sand: #C98A2E;
+  --sand-soft: #FBF1E1;
+  --paper: #FFFDF6;
+  --rule: #B9D3EA;
+  --margin-red: #E2766F;
+  --ok: #1F8A5B;
+  --ok-soft: #E3F4EC;
+  --warn: #B4630E;
+  --warn-soft: #FCEEDC;
+  --info: #2F6FCF;
+  --info-soft: #E3EDFB;
+  --bad: #C2413A;
+  --bad-soft: #FBE6E4;
+  --band: #EFEDF7;
+
+  --f-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --f-hand: "Kalam", "Comic Sans MS", cursive;
+
+  --r: 14px;
+  --shadow: 0 1px 2px rgba(23,20,43,.06), 0 12px 32px -12px rgba(23,20,43,.18);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 17px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.wrap {
+  width: 100%; max-width: 1300px; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+section { padding-block: 88px; }
+.band { background: var(--band); }
+
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+h1 { font-size: clamp(2.4rem, 5.6vw, 4.1rem); font-weight: 800; }
+h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); font-weight: 700; }
+h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; }
+p { margin: 0; }
+.lead { font-size: 1.15rem; color: var(--muted); max-width: 58ch; }
+.eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.sec-head { display: grid; gap: 14px; max-width: 720px; margin-bottom: 48px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 700 1rem/1 var(--f-body); text-decoration: none; border-radius: 12px;
+  padding: 16px 24px; border: 2px solid transparent; cursor: pointer; transition: transform .15s, background .15s;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-ghost { border-color: var(--line); background: var(--surface); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--accent); }
+.btn-sm { padding: 10px 16px; font-size: .92rem; border-radius: 10px; }
+
+/* Nav */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+.logo { display: inline-flex; text-decoration: none; }
+.logo img { height: 26px; width: auto; display: block; }
+.brand { font-weight: 800; letter-spacing: .03em; background: linear-gradient(100deg, #0F6FFF, #A026FF); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.nav-links { display: flex; gap: 28px; font-weight: 600; font-size: .95rem; }
+.nav-links a { text-decoration: none; color: var(--muted); }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta { display: flex; gap: 10px; align-items: center; }
+.nav-login { font-weight: 600; text-decoration: none; color: var(--muted); font-size: .95rem; }
+@media (max-width: 860px) { .nav-links { display: none; } }
+@media (max-width: 420px) { .nav-login { display: none; } }
+
+/* Hero */
+.hero { padding-block: 64px 88px; }
+.hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+.hero-copy { display: grid; gap: 24px; min-width: 0; }
+.hero h1 .strike { position: relative; color: var(--muted); white-space: nowrap; }
+.hero h1 .strike::after { content: ""; position: absolute; left: -4px; right: -4px; top: 54%; height: .09em; background: var(--margin-red); transform: rotate(-3deg); border-radius: 4px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-note { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: .93rem; color: var(--muted); }
+.hero-note span::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+.stores { display: flex; gap: 10px; flex-wrap: wrap; }
+.store { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 10px; background: var(--ink); color: var(--bg); text-decoration: none; font-size: .78rem; line-height: 1.2; }
+.store b { display: block; font-size: .98rem; }
+.store svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+
+/* Hero product mock */
+.mock { position: relative; min-width: 0; }
+.mock-card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 22px; display: grid; gap: 16px; }
+.mock-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.mock-top h3 { font-size: 1.05rem; }
+.mock-top .mono { font-size: .8rem; color: var(--muted); }
+.tally { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.tally div { border-radius: 10px; padding: 10px 8px; text-align: center; font-size: .72rem; font-weight: 600; color: var(--muted); }
+.tally b { display: block; font-family: var(--f-display); font-size: 1.5rem; color: var(--ink); line-height: 1.1; }
+.t-ok { background: var(--ok-soft); } .t-warn { background: var(--warn-soft); } .t-info { background: var(--info-soft); } .t-bad { background: var(--bad-soft); }
+.rows { display: grid; gap: 2px; }
+.row { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; padding: 10px 4px; border-top: 1px solid var(--line); }
+.av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .8rem; background: var(--accent-soft); color: var(--accent); }
+.row .who { min-width: 0; }
+.row .who b { display: block; font-size: .95rem; line-height: 1.2; }
+.row .who span { font-size: .8rem; color: var(--muted); }
+.chip { font-size: .74rem; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
+.c-ok { background: var(--ok-soft); color: var(--ok); }
+.c-warn { background: var(--warn-soft); color: var(--warn); }
+.c-info { background: var(--info-soft); color: var(--info); }
+.c-bad { background: var(--bad-soft); color: var(--bad); }
+.c-accent { background: var(--accent-soft); color: var(--accent); }
+.float-leave {
+  position: absolute; right: -18px; bottom: -34px; width: min(270px, 80%);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 14px 16px; display: grid; gap: 10px;
+  animation: rise .6s .3s both ease-out;
+}
+.float-leave .t { font-size: .78rem; color: var(--muted); font-weight: 600; }
+.float-leave b { font-size: .95rem; }
+.float-leave .acts { display: flex; gap: 8px; }
+.float-leave .acts span { flex: 1; text-align: center; font-size: .8rem; font-weight: 700; padding: 7px; border-radius: 8px; }
+.a-yes { background: var(--accent); color: var(--accent-ink); }
+.a-no { background: var(--band); color: var(--muted); }
+.example-tag { position: absolute; top: -12px; left: 18px; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--sand-soft); color: var(--sand); padding: 4px 10px; border-radius: 999px; }
+@keyframes rise { from { transform: translateY(12px); } to { transform: none; } }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .float-leave { position: relative; right: auto; bottom: auto; width: 100%; margin-top: 14px; }
+}
+
+/* Problem → solution pairs */
+.pairs { display: grid; gap: 22px; }
+.pair { display: grid; grid-template-columns: 1fr 56px 1fr; align-items: stretch; }
+.side { border-radius: var(--r); padding: 26px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.before {
+  background-color: var(--paper);
+  background-image: linear-gradient(to right, transparent 38px, var(--margin-red) 38px, var(--margin-red) 39.5px, transparent 39.5px), repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
+  padding-left: 58px; border: 1px solid var(--line);
+}
+.before .tag { font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--margin-red); }
+.before h3 { font-family: var(--f-hand); font-weight: 700; font-size: 1.45rem; line-height: 1.25; letter-spacing: 0; }
+.before p { font-family: var(--f-hand); font-size: 1.08rem; color: var(--muted); line-height: 2; }
+.after { background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.after .tag { font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.after p { color: var(--muted); }
+.after ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: .95rem; }
+.after li::before { content: "✓"; color: var(--ok); font-weight: 800; margin-right: 8px; }
+.arrow { display: grid; place-items: center; color: var(--accent); }
+.arrow svg { width: 30px; height: 30px; }
+@media (max-width: 820px) {
+  .pair { grid-template-columns: 1fr; }
+  .arrow { height: 44px; transform: rotate(90deg); }
+}
+
+/* Features */
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.feat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: grid; gap: 10px; align-content: start; }
+.feat .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.feat .ic svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.feat p { color: var(--muted); font-size: .97rem; }
+@media (max-width: 900px) { .features { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .features { grid-template-columns: 1fr; } }
+
+/* Leave types strip */
+.leave-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.leave-strip .chip { font-size: .85rem; padding: 8px 14px; }
+
+/* Steps */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; counter-reset: s; }
+.step { position: relative; padding: 28px 24px 24px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); display: grid; gap: 10px; align-content: start; }
+.step::before { counter-increment: s; content: counter(s); font-family: var(--f-display); font-weight: 800; font-size: 2.6rem; line-height: 1; color: var(--accent); }
+.step .time { font-family: var(--f-mono); font-size: .8rem; color: var(--sand); font-weight: 500; }
+.step p { color: var(--muted); font-size: .97rem; }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+
+/* For whom */
+.who-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+.who-pill { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; }
+.who-pill i { font-style: normal; font-size: 1.15rem; }
+.size-note { margin-top: 24px; color: var(--muted); }
+.size-note b { color: var(--ink); }
+
+/* Founder story */
+.story { display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 40px; box-shadow: var(--shadow); }
+.story .mark { font-family: var(--f-display); font-size: 6rem; line-height: .7; color: var(--accent); }
+.story blockquote { margin: 0; display: grid; gap: 16px; }
+.story blockquote p { font-family: var(--f-display); font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; }
+.story cite { font-style: normal; color: var(--muted); font-size: .95rem; }
+.story cite b { color: var(--ink); }
+@media (max-width: 640px) { .story { grid-template-columns: 1fr; padding: 28px 22px; gap: 8px; } .story .mark { font-size: 4rem; } }
+
+/* Compare table */
+.tbl-wrap { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--line); background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 620px; font-size: .97rem; }
+th, td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { font-family: var(--f-display); font-size: 1rem; background: var(--band); }
+thead th.us { background: var(--accent); color: var(--accent-ink); }
+td.us { background: var(--accent-soft); font-weight: 600; }
+tbody tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; }
+.no { color: var(--bad); font-weight: 700; } .yes { color: var(--ok); font-weight: 800; } .meh { color: var(--warn); font-weight: 700; }
+
+/* Pricing */
+.price-card { max-width: 560px; margin: 0 auto; background: var(--surface); border: 2px solid var(--accent); border-radius: 22px; padding: 36px; display: grid; gap: 18px; text-align: center; box-shadow: var(--shadow); }
+.price { font-family: var(--f-display); font-size: 3rem; font-weight: 800; line-height: 1; }
+.price small { font-family: var(--f-body); font-size: 1rem; font-weight: 500; color: var(--muted); }
+.todo { display: inline-block; font-size: .78rem; font-weight: 700; background: var(--sand-soft); color: var(--sand); border: 1px dashed var(--sand); border-radius: 8px; padding: 6px 10px; }
+.price-card ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; text-align: left; justify-self: center; }
+.price-card li::before { content: "✓"; color: var(--ok); font-weight: 800; margin-right: 10px; }
+
+/* FAQ */
+.faq { display: grid; gap: 12px; max-width: 820px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0 22px; }
+summary { cursor: pointer; list-style: none; font-weight: 700; padding: 18px 0; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-family: var(--f-display); font-size: 1.4rem; line-height: 1; color: var(--accent); transition: transform .2s; }
+details[open] summary::after { transform: rotate(45deg); }
+details p { padding-bottom: 18px; color: var(--muted); }
+
+/* App showcase */
+.show { display: grid; grid-template-columns: auto 1fr; gap: 56px; align-items: center; }
+.phone { width: 300px; max-width: 100%; border-radius: 42px; padding: 12px; background: #17142B; box-shadow: var(--shadow), 0 30px 60px -30px rgba(91,61,224,.45); position: relative; }
+.phone::before { content: ""; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 84px; height: 22px; border-radius: 999px; background: #17142B; z-index: 1; }
+.phone-screen { border-radius: 32px; overflow: hidden; background: #F5F7FB; aspect-ratio: 750 / 1500; }
+.phone-screen img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.show-copy { display: grid; gap: 28px; min-width: 0; }
+.show-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.show-list li { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; }
+.show-list .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 1.2rem; }
+.show-list b { display: block; font-size: 1.05rem; }
+.show-list span { color: var(--muted); font-size: .97rem; }
+.month { max-width: 520px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 14px; box-shadow: var(--shadow); }
+.month-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.month-head b { font-family: var(--f-display); font-size: 1.05rem; }
+.month-head .mono { font-size: .78rem; color: var(--muted); }
+.cal { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; }
+.cal i { aspect-ratio: 1; border-radius: 6px; display: grid; place-items: center; font: 500 .68rem var(--f-mono); font-style: normal; }
+.d-p { background: var(--ok-soft); color: var(--ok); } .d-w { background: var(--band); color: var(--muted); } .d-h { background: var(--sand-soft); color: var(--sand); }
+.d-l { background: var(--bad-soft); color: var(--bad); } .d-hd { background: var(--accent-soft); color: var(--accent); } .d-wfh { background: var(--info-soft); color: var(--info); }
+.month-sum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.month-sum div { font-size: .72rem; color: var(--muted); font-weight: 600; }
+.month-sum b { display: block; font: 700 1.15rem var(--f-display); color: var(--ink); }
+@media (max-width: 860px) { .show { grid-template-columns: 1fr; justify-items: center; } .show-copy { width: 100%; } }
+@media (max-width: 420px) { .cal { grid-template-columns: repeat(7, 1fr); } .month-sum { grid-template-columns: repeat(2, 1fr); } }
+
+/* Hero visual with real app */
+.hero-visual { position: relative; display: grid; justify-items: end; min-width: 0; padding-right: 4%; }
+.hero-phone { width: min(330px, 62%); height: auto; filter: drop-shadow(0 30px 40px rgba(91,61,224,.25)); }
+.hv-card { position: absolute; left: 0; top: 16%; width: min(320px, 58%); padding: 16px; gap: 12px; }
+.hv-card .example-tag { position: static; }
+.hero-visual .float-leave { left: 6%; right: auto; bottom: 6%; width: min(270px, 52%); }
+@media (max-width: 900px) {
+  .hero-visual { justify-items: center; padding-right: 0; gap: 14px; }
+  .hero-phone { width: min(300px, 78%); }
+  .hv-card, .hero-visual .float-leave { position: relative; left: auto; top: auto; bottom: auto; width: 100%; margin: 0; }
+}
+
+/* Leave screenshot with demo names */
+.leaves-shot { position: relative; margin: 0; width: 330px; max-width: 100%; container-type: inline-size; }
+.leaves-shot img { display: block; width: 100%; height: auto; }
+.ov { position: absolute; display: flex; align-items: center; background: #FFFFFF; white-space: nowrap; overflow: hidden; font-family: Roboto, "Figtree", system-ui, sans-serif; }
+.ov.nm { font-weight: 700; font-size: 3.5cqw; color: #111111; }
+.ov.rs { font-size: 2.95cqw; color: #6B6B6B; }
+.ov.av1, .ov.av2 { justify-content: center; border-radius: 50%; width: 9.6%; aspect-ratio: 1; background: #7C3AED; color: #FFFFFF; font-weight: 700; font-size: 3cqw; }
+.av1 { left: 11.8%; top: 44.2%; } .av2 { left: 11.8%; top: 67.7%; }
+.n1 { left: 22.6%; top: 45.4%; width: 38%; height: 3.6%; }
+.n2 { left: 22.6%; top: 68.8%; width: 32%; height: 3.6%; }
+.r1 { left: 11.6%; top: 58.4%; width: 76.6%; height: 3.2%; }
+.r2 { left: 11.6%; top: 81.8%; width: 66%; height: 3.2%; }
+
+/* Final CTA */
+.final { background: var(--ink); color: var(--bg); border-radius: 26px; padding: 56px 40px; display: grid; gap: 22px; justify-items: start; position: relative; overflow: hidden; }
+.final h2 { max-width: 18ch; }
+.final p { color: color-mix(in srgb, var(--bg) 75%, var(--ink)); max-width: 52ch; }
+.final .btn-primary { background: var(--accent); }
+.final .btn-ghost { background: transparent; color: var(--bg); border-color: color-mix(in srgb, var(--bg) 35%, var(--ink)); }
+.final::after {
+  content: ""; position: absolute; right: -60px; bottom: -80px; width: 380px; height: 220px; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--sand) 55%, transparent), transparent);
+  pointer-events: none;
+}
+@media (max-width: 560px) { .final { padding: 40px 22px; } }
+
+/* Footer */
+footer { padding-block: 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: center; }
+footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--ink); }
+
+/* Mobile sticky CTA */
+.m-cta { display: none; }
+@media (max-width: 640px) {
+  .m-cta { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 9; background: var(--surface); border-top: 1px solid var(--line);
+    padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+  .m-cta .btn { width: 100%; }
+  footer { padding-bottom: 110px; }
+  section { padding-block: 64px; }
+}
+/* Founder story on team photo */
+.story { display: grid; align-items: start; justify-items: start; height: 500px; padding: 0; border: 0; overflow: hidden; position: relative; background: #17142B; }
+.story-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; }
+.story::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(17,14,36,.7) 0%, rgba(17,14,36,.35) 28%, rgba(17,14,36,0) 45%); pointer-events: none; }
+.story-card { position: relative; z-index: 1; margin: 28px; max-width: 600px; display: grid; grid-template-columns: auto 1fr; gap: 20px; padding: 28px 30px; border-radius: 18px; background: rgba(23,20,43,.55); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); border: 1px solid rgba(255,255,255,.14); }
+.story .mark { color: #B3A6FF; font-size: 5rem; }
+.story blockquote p { color: #FFFFFF; font-size: clamp(1.1rem, 2vw, 1.4rem); }
+.story cite { color: rgba(255,255,255,.75); }
+.story cite b { color: #FFFFFF; }
+.story .brand { background-image: linear-gradient(100deg, #7DB2FF, #C79BFF); }
+@media (max-width: 640px) {
+  .story { height: auto; align-items: end; justify-items: stretch; padding-top: 240px; }
+  .story-bg { height: 300px; object-position: center 40%; }
+  .story::after { background: linear-gradient(to bottom, rgba(17,14,36,0) 120px, #17142B 300px); }
+  .story-card { margin: 0; grid-template-columns: 1fr; gap: 4px; padding: 20px 20px 26px; border-radius: 0; background: transparent; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .story .mark { font-size: 3.5rem; }
+}
+.lang { font-weight: 600; font-size: .88rem; text-decoration: none; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+.lang:hover { color: var(--ink); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Dune home"><img src="dune-logo.svg" alt="DUNE" width="134" height="36"></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#problems">Problems</a>
+      <a href="#features">Features</a>
+      <a href="#how">Kaise shuru karein</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="lang" href="en.html" hreflang="en" lang="en">English</a>
+      <a class="nav-login" href="https://dune.dyzo.ai/login">Login</a>
+      <a class="btn btn-primary btn-sm" href="https://dune.dyzo.ai/register">Free try karo</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">10–50 logon ke office ke liye</span>
+      <h1><span class="strike">Register</span> band karo.<br>Attendance, leave aur salary, <em>ek app mein.</em></h1>
+      <p class="lead">Kaun time pe aaya, kaun leave pe hai, kisko kitni salary deni hai: sab aapke phone pe. WhatsApp pe leave aur month end ka hisaab ab nahi.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="https://dune.dyzo.ai/register">Free try karo →</a>
+        <a class="btn btn-ghost" href="#how">Kaise kaam karta hai</a>
+      </div>
+      <div class="hero-note">
+        <span>Credit card nahi chahiye</span>
+        <span>Office aur remote staff dono</span>
+        <span>Android, iPhone aur web</span>
+      </div>
+      <div class="stores">
+        <a class="store" href="https://play.google.com/store/apps/details?id=com.dyzoai.dyzohr">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.2c-.3.3-.4.7-.4 1.2v17.2c0 .5.1.9.4 1.2l9.6-9.8L3.6 2.2zm10.8 9.6 2.9-3L5.2 1.9c-.4-.2-.8-.2-1.1-.1l10.3 10zm0 .4-10.3 10c.3.1.7.1 1.1-.1l12.1-6.9-2.9-3zm6.3-3.3-2.7-1.6-3.1 3.1 3.1 3.1 2.7-1.6c.8-.5.8-1.6 0-2.1z"/></svg>
+          <span>Get it on<b>Google Play</b></span>
+        </a>
+        <a class="store" href="https://apps.apple.com/in/app/dyzo-dune/id6754912601">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM13.9 4.9c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>
+          <span>Download on the<b>App Store</b></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <img class="hero-phone" src="img/app-punch.webp" alt="DUNE app: staff ka punch-in 09:06 AM, office location ke saath" width="1020" height="2000">
+      <div class="mock-card hv-card" aria-label="Owner ke dashboard pe aaj ki attendance ka example">
+        <div class="mock-top">
+          <h3>Aaj ki attendance</h3>
+          <span class="example-tag">Example</span>
+        </div>
+        <div class="tally">
+          <div class="t-ok"><b>18</b>Present</div>
+          <div class="t-warn"><b>2</b>Late</div>
+          <div class="t-info"><b>3</b>WFH</div>
+          <div class="t-bad"><b>1</b>Leave</div>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="av">RS</span><span class="who"><b>Riya Sharma</b><span class="mono">09:02 AM · 📍 Office</span></span><span class="chip c-ok">Present</span></div>
+          <div class="row"><span class="av">KV</span><span class="who"><b>Karan Verma</b><span class="mono">10:28 AM · 📍 Office</span></span><span class="chip c-warn">Late</span></div>
+        </div>
+      </div>
+      <div class="float-leave" role="group" aria-label="Leave request ka example">
+        <span class="t">Nayi leave request</span>
+        <b>Pooja · Short Leave · Kal 4–6 PM</b>
+        <div class="acts"><span class="a-yes">Approve</span><span class="a-no">Reject</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMS → SOLUTIONS -->
+<section id="problems" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Kya ye aapke office mein bhi hota hai?</span>
+      <h2>Har office owner ki 4 roz ki pareshaniyan, aur <span class="brand">DUNE</span> unhe kaise hal karta hai</h2>
+    </div>
+
+    <div class="pairs">
+      <div class="pair">
+        <div class="side before">
+          <span class="tag">Pehle</span>
+          <h3>"Sir, maine toh bola tha, aapne haan kaha tha!"</h3>
+          <p>Leave WhatsApp pe aati hai. 10 chats mein kisko haan bola, yaad nahi rehta.</p>
+        </div>
+        <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="side after">
+          <span class="tag"><span class="brand">DUNE</span> ke saath</span>
+          <h3>Leave ek jagah, approve ek click mein</h3>
+          <p>Staff app se leave apply karta hai. Aapko notification aata hai. Approve karte hi attendance khud update ho jaati hai.</p>
+          <ul><li>Half Day, Short Leave, WFH, Personal Leave</li><li>Har request ka record date ke saath</li></ul>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="side before">
+          <span class="tag">Pehle</span>
+          <h3>"Sir, bas 5 minute mein pahunch raha hoon"</h3>
+          <p>Register mein koi bhi 9:00 likh deta hai. Asli time kisi ko nahi pata.</p>
+        </div>
+        <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="side after">
+          <span class="tag"><span class="brand">DUNE</span> ke saath</span>
+          <h3>Phone se check-in, time aur location ke saath</h3>
+          <p>Staff office pahunch ke app se check-in karta hai. Geo-fencing se check-in sirf office location se hi hota hai.</p>
+          <ul><li>Late aane walon ki list apne aap</li><li>Missed punch bhi dikh jaata hai</li></ul>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="side before">
+          <span class="tag">Pehle</span>
+          <h3>Month end = Salary ka lafda</h3>
+          <p>Calculator, register aur Excel. Kiski kitni leave, kitni salary katni hai, 2 din isi mein.</p>
+        </div>
+        <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="side after">
+          <span class="tag"><span class="brand">DUNE</span> ke saath</span>
+          <h3>Attendance se seedha salary ka hisaab</h3>
+          <p>Poore mahine ka record already app mein hai. Present, leave, half day, unpaid leave: sab gina hua milta hai.</p>
+          <ul><li>Monthly report aur CSV download</li><li>Salary slip staff ke saath share</li></ul>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="side before">
+          <span class="tag">Pehle</span>
+          <h3>Office nahi gaye, toh kuch pata nahi</h3>
+          <p>Bahar meeting mein ho ya chhutti pe, office mein kya chal raha hai, kaun aaya, kuch nahi dikhta.</p>
+        </div>
+        <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="side after">
+          <span class="tag"><span class="brand">DUNE</span> ke saath</span>
+          <h3>Poora office aapki jeb mein</h3>
+          <p>Kahin se bhi app kholo: aaj kaun present hai, kaun WFH, kaun leave pe. Remote staff bhi isi mein.</p>
+          <ul><li>Live dashboard, phone aur laptop dono pe</li><li>Leave aur requests kahin se bhi approve</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Features</span>
+      <h2>Office chalane ke liye jo chahiye, bas utna. Extra complication nahi.</h2>
+      <p class="lead">Badi HR software jaisi training ki zaroorat nahi. Aapka staff pehle din se use kar lega.</p>
+    </div>
+
+    <div class="features">
+      <div class="feat">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <h3>Geo-fenced attendance</h3>
+        <p>Office location set karo. Staff wahi se phone pe check-in aur check-out karega.</p>
+      </div>
+      <div class="feat">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M9 15l2 2 4-4"/></svg></span>
+        <h3>Leave aur approvals</h3>
+        <p>Staff app se apply kare, aap ek click mein approve ya reject karo. Leave balance apne aap update.</p>
+      </div>
+      <div class="feat">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span>
+        <h3>Monthly attendance report</h3>
+        <p>Har employee ka mahine bhar ka calendar. Present, leave, missed punch, sab ek nazar mein. CSV mein download.</p>
+      </div>
+      <div class="feat">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/><path d="M6 6V4h12v2"/></svg></span>
+        <h3>Salary aur payslip</h3>
+        <p>Attendance ke hisaab se salary ka calculation. Deductions saaf dikhte hain, jhagda nahi hota.</p>
+      </div>
+      <div class="feat">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <h3>Shifts</h3>
+        <p>Morning, evening ya apni shift banao. Office timing, break aur half day ke rules ek baar set karo.</p>
+      </div>
+      <div class="feat">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3z"/></svg></span>
+        <h3>Notice board</h3>
+        <p>Company announcement ek baar post karo, poori team ke app mein pahunch jaata hai. WhatsApp group ki zaroorat nahi.</p>
+      </div>
+    </div>
+
+    <div class="leave-strip" aria-label="Leave ke types">
+      <span class="chip c-accent">Half Day</span>
+      <span class="chip c-info">Work from Home</span>
+      <span class="chip c-warn">Short Leave</span>
+      <span class="chip c-ok">Personal Leave</span>
+      <span class="chip c-bad">Unpaid Leave</span>
+      <span class="chip c-accent">Holiday list</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Kaise shuru karein</span>
+      <h2>Aaj signup karo, kal se attendance app pe</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="time">~2 minute</span>
+        <h3>Account banao</h3>
+        <p>Naam aur email daalo. Ya Google se sign in karo. Credit card nahi chahiye.</p>
+      </div>
+      <div class="step">
+        <span class="time">~10 minute</span>
+        <h3>Staff add karo, rules set karo</h3>
+        <p>Employees add karo, office location, shift timing aur leave rules ek baar set karo.</p>
+      </div>
+      <div class="step">
+        <span class="time">Agle din se</span>
+        <h3>Staff app se check-in kare</h3>
+        <p>Team <span class="brand">DUNE</span> app download kare aur phone se check-in kare. Aap dashboard pe sab dekho.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APP SHOWCASE -->
+<section>
+  <div class="wrap show">
+    <figure class="leaves-shot" aria-label="DUNE app ki leave list">
+      <img src="img/app-leaves.webp" alt="DUNE app ki All Leaves screen: Work from Home aur Half Day requests Pending" width="1156" height="2000" loading="lazy">
+      <span class="ov av1">RS</span><span class="ov nm n1">Riya Sharma</span><span class="ov rs r1">Aaj ghar se kaam karungi, internet wala aa raha hai…</span>
+      <span class="ov av2">AM</span><span class="ov nm n2">Aman Malik</span><span class="ov rs r2">Doctor appointment ke liye half day chahiye…</span>
+    </figure>
+    <div class="show-copy">
+      <div class="sec-head" style="margin-bottom:0">
+        <span class="eyebrow">Asli app, asli screen</span>
+        <h2>Leave maangna, approve karna, track karna. Sab app mein.</h2>
+        <p class="lead">Staff app se Work from Home, Half Day ya leave apply karta hai, reason ke saath. Aapko ek list mein sab requests dikhti hain: kaun, kab, kyun. WhatsApp scroll karne ki zaroorat nahi.</p>
+      </div>
+      <ul class="show-list">
+        <li><span class="ic" style="background:var(--ok-soft)">✅</span><span><b>Apply Leave, 2 tap mein</b><span>Date chuno, type chuno, reason likho. Request aapke paas pahunch gayi.</span></span></li>
+        <li><span class="ic" style="background:var(--accent-soft)">📄</span><span><b>Pending, Approved, Rejected</b><span>Har request ka status ek jagah. Kuch bhoolna nahi padta.</span></span></li>
+        <li><span class="ic" style="background:var(--warn-soft)">⏳</span><span><b>Colleague ki leave bhi</b><span>Manager team member ki taraf se bhi leave apply kar sakta hai.</span></span></li>
+      </ul>
+      <div class="month" aria-label="Mahine ki attendance ka example">
+        <div class="month-head"><b>Rahul Mehta · November</b><span class="mono">Example</span></div>
+        <div class="cal"><i class="d-w">1</i><i class="d-p">2</i><i class="d-p">3</i><i class="d-p">4</i><i class="d-p">5</i><i class="d-p">6</i><i class="d-w">7</i><i class="d-w">8</i><i class="d-h">9</i><i class="d-h">10</i><i class="d-h">11</i><i class="d-p">12</i><i class="d-p">13</i><i class="d-w">14</i><i class="d-w">15</i><i class="d-p">16</i><i class="d-l">17</i><i class="d-p">18</i><i class="d-p">19</i><i class="d-p">20</i><i class="d-w">21</i><i class="d-w">22</i><i class="d-hd">23</i><i class="d-wfh">24</i><i class="d-p">25</i><i class="d-p">26</i><i class="d-p">27</i><i class="d-w">28</i><i class="d-w">29</i><i class="d-p">30</i></div>
+        <div class="month-sum">
+          <div><b>15</b>Present</div><div><b>1</b>Leave</div><div><b>1</b>Half Day</div><div><b>1</b>WFH</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Kiske liye bana hai</span>
+      <h2>Chhote aur badhte offices ke liye</h2>
+    </div>
+    <div class="who-grid">
+      <span class="who-pill"><i>💻</i>Digital aur IT agencies</span>
+      <span class="who-pill"><i>📚</i>Coaching institutes</span>
+      <span class="who-pill"><i>🩺</i>Clinics aur diagnostic labs</span>
+      <span class="who-pill"><i>🧾</i>CA aur accounting firms</span>
+      <span class="who-pill"><i>🏢</i>Real estate offices</span>
+      <span class="who-pill"><i>✈️</i>Travel agencies</span>
+      <span class="who-pill"><i>🛠️</i>Software startups</span>
+    </div>
+    <p class="size-note">Agar aapke office mein <b>10 se 50 log</b> hain aur abhi register, Excel ya WhatsApp se kaam chal raha hai, toh <span class="brand">DUNE</span> aapke liye hai.</p>
+  </div>
+</section>
+
+<!-- FOUNDER STORY -->
+<section class="band">
+  <div class="wrap">
+    <figure class="story" style="margin:0">
+      <img class="story-bg" src="img/team-prpwebs.webp" alt="PRP Webs ki team, jo roz DUNE use karti hai" width="1440" height="960" loading="lazy">
+      <div class="story-card">
+      <span class="mark" aria-hidden="true">“</span>
+      <blockquote>
+        <p>Hum khud ek agency chalate hain. Attendance register mein thi, leave WhatsApp pe, aur har month end pe salary ka hisaab. Isliye <span class="brand">DUNE</span> pehle apni team ke liye banaya. Aaj hamari poori team, office aur remote dono, isi pe chalti hai.</p>
+        <cite><b>Founder, PRP Webs</b> · <span class="brand">DUNE</span> ke banane wale</cite>
+      </blockquote>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Compare karo</span>
+      <h2>Register, badi HR software, ya <span class="brand">DUNE</span>?</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th scope="col"></th><th scope="col">Register / Excel</th><th scope="col">Badi HR software</th><th scope="col" class="us">DUNE</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Asli check-in time</td><td><span class="no">✕</span> Koi bhi kuch likh de</td><td><span class="yes">✓</span></td><td class="us"><span class="yes">✓</span> Time + location</td></tr>
+          <tr><td>Leave ka record</td><td><span class="no">✕</span> WhatsApp mein kho jaata hai</td><td><span class="yes">✓</span></td><td class="us"><span class="yes">✓</span> Ek click approve</td></tr>
+          <tr><td>Month end salary hisaab</td><td><span class="no">✕</span> Haath se, din lagte hain</td><td><span class="yes">✓</span></td><td class="us"><span class="yes">✓</span> Attendance se seedha</td></tr>
+          <tr><td>Seekhne mein aasaan</td><td><span class="yes">✓</span></td><td><span class="meh">~</span> Training chahiye</td><td class="us"><span class="yes">✓</span> Pehle din se</td></tr>
+          <tr><td>Chhote office ke budget mein</td><td><span class="yes">✓</span></td><td><span class="no">✕</span> Mehenga</td><td class="us"><span class="yes">✓</span> Free trial se shuru</td></tr>
+          <tr><td>Phone se sab dekhna</td><td><span class="no">✕</span></td><td><span class="meh">~</span> Kuch mein</td><td class="us"><span class="yes">✓</span> App + web</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="band">
+  <div class="wrap">
+    <div class="sec-head" style="text-align:center; margin-inline:auto; justify-items:center">
+      <span class="eyebrow">Pricing</span>
+      <h2>Simple pricing. Koi hidden charge nahi.</h2>
+    </div>
+    <div class="price-card">
+      <span class="todo">Team se price confirm karke yahan daalna hai</span>
+      <div class="price">₹__ <small>/ employee / month</small></div>
+      <ul>
+        <li>Unlimited check-ins, geo-fencing</li>
+        <li>Leave, shifts aur holiday list</li>
+        <li>Monthly reports aur CSV export</li>
+        <li>Android, iPhone aur web dashboard</li>
+      </ul>
+      <a class="btn btn-primary" href="https://dune.dyzo.ai/register">Free try karo →</a>
+      <span style="font-size:.9rem; color:var(--muted)">Credit card nahi chahiye</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Sawaal</span>
+      <h2>Aksar pooche jaane wale sawaal</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Hamara kaam register aur Excel se chal raha hai. Badalna kyun?</summary>
+        <p>Register mein time koi bhi likh sakta hai aur leave ka record WhatsApp mein kho jaata hai. Month end pe salary banane mein sabse zyada time yahi jaata hai. <span class="brand">DUNE</span> mein ye sab apne aap record hota hai, aur hisaab ready milta hai.</p>
+      </details>
+      <details>
+        <summary>Hamara office sirf 10–15 logon ka hai. Kya ye zyada nahi hai?</summary>
+        <p>Nahi. <span class="brand">DUNE</span> chhote offices ke liye hi bana hai. Setup kuch minute ka hai aur staff ko koi training nahi chahiye.</p>
+      </details>
+      <details>
+        <summary>Setup mein kitna time lagta hai?</summary>
+        <p>Account 2 minute mein ban jaata hai. Staff add karna aur office timing set karna lagbhag 10 minute ka kaam hai. Agle din se attendance app pe lag sakti hai.</p>
+      </details>
+      <details>
+        <summary>Remote ya work from home staff ka kya?</summary>
+        <p>Remote staff bhi app se check-in kar sakta hai, aur WFH leave type alag se track hota hai. Office aur remote dono ek hi dashboard pe dikhte hain.</p>
+      </details>
+      <details>
+        <summary>Staff office ke bahar se check-in toh nahi kar lega?</summary>
+        <p>Geo-fencing on karo, toh check-in sirf office location ke andar se hi hoga.</p>
+      </details>
+      <details>
+        <summary>Paise dene se pehle try kar sakte hain?</summary>
+        <p>Haan. Free trial mein credit card nahi chahiye. Apni team ke saath try karo, pasand aaye tabhi aage badho.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="final">
+      <span class="eyebrow" style="color:var(--sand)">Is mahine se shuru karo</span>
+      <h2>Agla salary day jhagde wala nahi, aasaan hoga.</h2>
+      <p>Aaj signup karo, kal se attendance phone pe. Month end pe hisaab ready milega.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="https://dune.dyzo.ai/register">Free try karo →</a>
+        <a class="btn btn-ghost" href="https://dune.dyzo.ai/login">Login</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Dune home"><img src="dune-logo.svg" alt="DUNE" width="134" height="36"></a>
+    <nav aria-label="Footer">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="https://dune.dyzo.ai/privacy-policy">Privacy Policy</a>
+      <a href="https://dune.dyzo.ai/terms-and-conditions">Terms</a>
+      <a href="en.html" hreflang="en" lang="en">English</a>
+    </nav>
+    <span>© 2026 <span class="brand">DUNE</span> by Dyzo</span>
+  </div>
+</footer>
+
+<div class="m-cta"><a class="btn btn-primary" href="https://dune.dyzo.ai/register">Free try karo →</a></div>
+
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUNE Product Video 9:16</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Kalam:wght@400;700&display=swap">
+<style>
+/* 1080×1920 vertical stage, scaled to fit. Seven scenes joined by a brand-gradient wipe. */
+:root {
+  --bg: #F7F6FB; --surface: #FFFFFF; --ink: #17142B; --muted: #5D5878; --line: #E3E0EF;
+  --accent: #5B3DE0; --accent-soft: #ECE8FD; --sand: #C98A2E; --sand-soft: #FBF1E1;
+  --paper: #FFFDF6; --rule: #B9D3EA; --margin-red: #E2766F;
+  --ok: #1F8A5B; --ok-soft: #E3F4EC; --warn: #B4630E; --warn-soft: #FCEEDC;
+  --info: #2F6FCF; --info-soft: #E3EDFB; --bad: #C2413A; --bad-soft: #FBE6E4; --band: #EFEDF7;
+  --g1: #0F6FFF; --g2: #A026FF;
+  --f-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --f-body: "Figtree", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, monospace;
+  --f-hand: "Kalam", cursive;
+  --shadow: 0 2px 4px rgba(23,20,43,.06), 0 30px 60px -20px rgba(23,20,43,.25);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #0E0C1A; overflow: hidden; }
+body { display: grid; place-items: center; font-family: var(--f-body); color: var(--ink); }
+
+.stage { position: relative; width: 1080px; height: 1920px; background: var(--bg); overflow: hidden; transform-origin: center center; flex: none; cursor: pointer; }
+.blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; }
+.blob.b1 { width: 900px; height: 900px; left: -250px; top: -300px; background: #DCD3FF; animation: drift 14s ease-in-out infinite alternate; }
+.blob.b2 { width: 800px; height: 800px; right: -250px; bottom: -320px; background: #D2E3FF; animation: drift 17s ease-in-out infinite alternate-reverse; }
+@keyframes drift { to { transform: translate(140px, 90px) scale(1.1); } }
+
+.scene { position: absolute; inset: 0; visibility: hidden; opacity: 0; }
+.brand { font-weight: 800; letter-spacing: .03em; background: linear-gradient(100deg, var(--g1), var(--g2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; letter-spacing: -0.025em; line-height: 1.02; }
+
+/* Wipe + progress */
+#wipe { position: absolute; inset: 0; z-index: 50; background: linear-gradient(100deg, var(--g1), var(--g2)); visibility: hidden; display: grid; place-items: center; }
+#wipe img { height: 90px; filter: brightness(0) invert(1); opacity: .9; }
+#fade { position: absolute; inset: 0; z-index: 60; background: var(--bg); opacity: 0; pointer-events: none; }
+.progress { position: absolute; left: 0; bottom: 0; height: 6px; width: 0; z-index: 70; background: linear-gradient(90deg, var(--g1), var(--g2)); }
+.rec .progress { display: none; }
+
+/* S1 intro */
+#s1 { display: grid; place-items: center; text-align: center; }
+#s1 .wrap { display: grid; gap: 34px; justify-items: center; }
+#s1 .logo-big { width: 620px; height: auto; }
+#s1 .tag { font-family: var(--f-display); font-weight: 700; font-size: 76px; letter-spacing: -0.02em; display: flex; gap: 22px; overflow: hidden; padding-bottom: 8px; }
+#s1 .tag span { display: inline-block; }
+#s1 .sub { font-size: 34px; color: var(--muted); }
+
+/* S2 register */
+#s2 .paper {
+  position: absolute; left: 190px; top: 170px; width: 760px; height: 740px; border-radius: 18px; transform: rotate(-4deg);
+  background-color: var(--paper);
+  background-image: linear-gradient(to right, transparent 92px, var(--margin-red) 92px, var(--margin-red) 95px, transparent 95px), repeating-linear-gradient(to bottom, transparent 0 63px, var(--rule) 63px 65px);
+  box-shadow: var(--shadow); padding: 70px 60px 60px 130px; display: grid; align-content: start; gap: 22px;
+}
+#s2 .paper .title { font: 700 40px var(--f-hand); color: var(--margin-red); }
+#s2 .hl { font: 400 44px/1.2 var(--f-hand); color: #2B2A4A; white-space: nowrap; }
+#s2 .hl b { color: var(--margin-red); }
+#s2 .strike { position: absolute; left: 90px; right: 40px; top: 52%; height: 12px; background: var(--margin-red); border-radius: 8px; transform: rotate(-9deg) scaleX(0); transform-origin: left center; }
+#s2 .lines { position: absolute; left: 1060px; top: 330px; width: 760px; height: 420px; }
+#s2 .q, #s2 .a { position: absolute; left: 0; top: 0; font-family: var(--f-display); font-weight: 800; font-size: 110px; letter-spacing: -0.03em; line-height: 1.02; }
+#s2 .q { color: var(--ink); }
+#s2 .q small { display: block; font: 500 36px var(--f-body); color: var(--muted); letter-spacing: 0; margin-top: 26px; }
+#s2 .a em { font-style: normal; color: var(--accent); }
+
+/* Feature scenes */
+.feat { display: grid; grid-template-columns: 820px 1fr; align-items: center; padding: 0 140px 0 170px; height: 100%; gap: 40px; }
+.copy { display: grid; gap: 28px; }
+.eyebrow { font: 700 26px var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 16px; }
+.eyebrow i { font-style: normal; display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--accent); color: #fff; letter-spacing: 0; font-size: 24px; }
+.copy h2 { font-size: 92px; font-weight: 800; }
+.copy p { font-size: 34px; line-height: 1.45; color: var(--muted); max-width: 30ch; margin: 0; }
+.visual { position: relative; height: 1080px; display: grid; place-items: center; }
+
+.phone-img { height: 880px; width: auto; filter: drop-shadow(0 40px 50px rgba(91,61,224,.28)); }
+.chip { position: absolute; display: inline-flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: 18px; padding: 18px 24px; font: 600 28px var(--f-body); white-space: nowrap; }
+.chip .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 6px var(--ok-soft); }
+.chip .mono { font-family: var(--f-mono); color: var(--accent); }
+.ring { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 5px solid var(--accent); }
+.ring::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 5px solid var(--accent); animation: ping 1.6s ease-out infinite; }
+@keyframes ping { from { transform: scale(1); opacity: .7; } to { transform: scale(1.9); opacity: 0; } }
+
+/* Leaves shot with demo-name overlays */
+.leaves-shot { position: relative; width: 508px; container-type: inline-size; }
+.leaves-shot img { display: block; width: 100%; height: auto; }
+.ov { position: absolute; display: flex; align-items: center; background: #FFFFFF; white-space: nowrap; overflow: hidden; font-family: Roboto, "Figtree", system-ui, sans-serif; }
+.ov.nm { font-weight: 700; font-size: 3.5cqw; color: #111111; }
+.ov.rs { font-size: 2.95cqw; color: #6B6B6B; }
+.ov.av1, .ov.av2 { justify-content: center; border-radius: 50%; width: 9.6%; aspect-ratio: 1; background: #7C3AED; color: #FFFFFF; font-weight: 700; font-size: 3cqw; }
+.av1 { left: 11.8%; top: 44.2%; } .av2 { left: 11.8%; top: 67.7%; }
+.n1 { left: 22.6%; top: 45.4%; width: 38%; height: 3.6%; }
+.n2 { left: 22.6%; top: 68.8%; width: 32%; height: 3.6%; }
+.r1 { left: 11.6%; top: 58.4%; width: 76.6%; height: 3.2%; }
+.r2 { left: 11.6%; top: 81.8%; width: 66%; height: 3.2%; }
+
+.lcard { position: absolute; left: -40px; top: 250px; width: 470px; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); padding: 28px; display: grid; gap: 16px; }
+.lcard .t { font: 600 22px var(--f-body); color: var(--muted); }
+.lcard b { font: 700 30px var(--f-body); }
+.lcard .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.lcard .btn { position: relative; height: 64px; border-radius: 14px; display: grid; place-items: center; font: 700 26px var(--f-body); overflow: visible; }
+.lcard .yes { background: var(--accent); color: #fff; }
+.lcard .yes span { grid-area: 1 / 1; }
+.lcard .no { background: var(--band); color: var(--muted); }
+.tap { position: absolute; left: 50%; top: 50%; width: 70px; height: 70px; margin: -35px 0 0 -35px; border-radius: 50%; background: rgba(255,255,255,.7); opacity: 0; }
+.toast { position: absolute; right: 30px; bottom: 150px; }
+.toast .dot { background: var(--ok); }
+
+/* Dashboard card */
+.dash { width: 860px; background: var(--surface); border: 1px solid var(--line); border-radius: 30px; box-shadow: var(--shadow); padding: 38px; display: grid; gap: 26px; }
+.dash-top { display: flex; justify-content: space-between; align-items: baseline; }
+.dash-top h3 { font-size: 40px; }
+.dash-top .mono { font: 500 22px var(--f-mono); color: var(--muted); }
+.tally { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.tally div { border-radius: 18px; padding: 20px 10px; text-align: center; font: 600 22px var(--f-body); color: var(--muted); }
+.tally b { display: block; font: 800 64px/1.05 var(--f-display); color: var(--ink); }
+.t-ok { background: var(--ok-soft); } .t-warn { background: var(--warn-soft); } .t-info { background: var(--info-soft); } .t-bad { background: var(--bad-soft); }
+.row { display: grid; grid-template-columns: 60px 1fr auto; gap: 20px; align-items: center; padding: 16px 4px; border-top: 1px solid var(--line); }
+.av { width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; font: 700 22px var(--f-body); background: var(--accent-soft); color: var(--accent); }
+.who b { display: block; font-size: 28px; }
+.who span { font: 500 20px var(--f-mono); color: var(--muted); }
+.pill { font: 700 20px var(--f-body); padding: 10px 18px; border-radius: 999px; }
+.c-ok { background: var(--ok-soft); color: var(--ok); } .c-warn { background: var(--warn-soft); color: var(--warn); } .c-info { background: var(--info-soft); color: var(--info); } .c-acc { background: var(--accent-soft); color: var(--accent); }
+
+/* Month calendar */
+.month { width: 860px; background: var(--surface); border: 1px solid var(--line); border-radius: 30px; box-shadow: var(--shadow); padding: 38px; display: grid; gap: 26px; }
+.month-head { display: flex; justify-content: space-between; align-items: center; }
+.month-head h3 { font-size: 40px; }
+.csv { font: 700 22px var(--f-body); background: var(--accent); color: #fff; padding: 14px 22px; border-radius: 14px; }
+.cal { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; }
+.cal i { aspect-ratio: 1; border-radius: 12px; display: grid; place-items: center; font: 500 22px var(--f-mono); font-style: normal; }
+.d-p { background: var(--ok-soft); color: var(--ok); } .d-w { background: var(--band); color: var(--muted); } .d-h { background: var(--sand-soft); color: var(--sand); }
+.d-l { background: var(--bad-soft); color: var(--bad); } .d-hd { background: var(--accent-soft); color: var(--accent); } .d-wfh { background: var(--info-soft); color: var(--info); }
+.sum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; border-top: 1px solid var(--line); padding-top: 22px; }
+.sum div { font: 600 22px var(--f-body); color: var(--muted); }
+.sum b { display: block; font: 800 52px/1.05 var(--f-display); color: var(--ink); }
+
+/* S7 outro */
+#s7 { display: grid; place-items: center; text-align: center; }
+#s7 .words { display: flex; gap: 40px; font-family: var(--f-display); font-weight: 800; font-size: 120px; letter-spacing: -0.035em; }
+#s7 .words span:nth-child(2) { color: var(--accent); }
+#s7 .end { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 44px; }
+#s7 .end img { width: 520px; height: auto; }
+#s7 .end .line { font: 600 40px var(--f-body); color: var(--muted); }
+#s7 .cta { display: inline-flex; align-items: center; gap: 22px; padding: 26px 46px; border-radius: 22px; background: var(--accent); color: #fff; font: 700 40px var(--f-body); box-shadow: 0 30px 60px -20px rgba(91,61,224,.6); }
+#s7 .cta .mono { font-family: var(--f-mono); font-weight: 500; opacity: .85; font-size: 32px; }
+#s7 .stores { display: flex; gap: 20px; justify-content: center; }
+#s7 .store { display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 14px; background: var(--ink); color: #fff; font-size: 18px; line-height: 1.2; text-align: left; }
+#s7 .store b { display: block; font-size: 26px; }
+#s7 .store svg { width: 34px; height: 34px; fill: #fff; }
+
+.hint { position: fixed; bottom: 14px; right: 18px; color: #8C86AE; font: 500 13px var(--f-body); }
+.rec .hint { display: none; }
+@media (prefers-reduced-motion: reduce) { .blob, .ring::after { animation: none; } }
+
+/* Vertical layout overrides */
+#s1 .tag { flex-direction: column; gap: 0; font-size: 96px; align-items: center; line-height: 1.1; }
+#s1 .sub { font-size: 38px; }
+#s2 .paper { left: 110px; top: 860px; width: 860px; height: 760px; }
+#s2 .lines { left: 90px; top: 240px; width: 900px; height: 520px; }
+#s2 .q { font-size: 96px; }
+#s2 .a { font-size: 128px; }
+.feat { grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-items: start; padding: 150px 90px 0; gap: 10px; }
+.copy { gap: 24px; }
+.copy h2 { font-size: 96px; }
+.copy p { font-size: 38px; max-width: none; }
+.visual { height: 1240px; }
+.phone-img { height: 1080px; }
+.leaves-shot { width: 620px; }
+.lcard { left: 0; top: 300px; }
+.toast { right: 10px; bottom: 120px; }
+.dash, .month { width: 900px; }
+#s5 .feat, #s6 .feat { grid-template-rows: auto auto; align-content: center; padding-top: 0; gap: 80px; }
+#s5 .visual, #s6 .visual { height: auto; }
+#s7 .words { flex-direction: column; gap: 0; font-size: 150px; line-height: 1.05; }
+#s7 .end .line { font-size: 42px; }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage" role="img" aria-label="DUNE product video: attendance, leave and salary in one app">
+  <div class="blob b1"></div><div class="blob b2"></div>
+
+  <!-- S1 Intro -->
+  <section class="scene" id="s1">
+    <div class="wrap">
+      <img class="logo-big" src="dune-logo.svg" alt="DUNE" width="134" height="36">
+      <div class="tag"><span>Attendance.</span><span>Leave.</span><span>Salary.</span></div>
+      <div class="sub">One app for your whole office.</div>
+    </div>
+  </section>
+
+  <!-- S2 Register problem -->
+  <section class="scene" id="s2">
+    <div class="paper">
+      <div class="title">Attendance · Nov</div>
+      <div class="hl">Riya ........ 9:00 ✓</div>
+      <div class="hl">Karan ....... 9:00 <b>??</b></div>
+      <div class="hl">Neha ........ leave? WhatsApp</div>
+      <div class="hl">Aman ........ <b>salary − ?</b></div>
+      <div class="strike"></div>
+    </div>
+    <div class="lines">
+      <div class="q">Still running your office on a register?<small>Late marks, lost leave requests, month-end guesswork.</small></div>
+      <div class="a">Close the register.<br><em>Open</em> <span class="brand">DUNE</span>.</div>
+    </div>
+  </section>
+
+  <!-- S3 Check-in -->
+  <section class="scene" id="s3">
+    <div class="feat">
+      <div class="copy">
+        <span class="eyebrow"><i>1</i>Check-in</span>
+        <h2>Punch in from the phone.</h2>
+        <p>Geo-fenced to your office. Every check-in saved with time and location.</p>
+      </div>
+      <div class="visual">
+        <img class="phone-img" src="img/app-punch.webp" alt="" width="1020" height="2000">
+        <div class="ring" style="left: calc(50% + 36px); top: 376px;"></div>
+        <div class="chip c1" style="left: 10px; top: 340px;"><span class="dot"></span>Inside office geo-fence</div>
+        <div class="chip c2" style="right: 0; top: 800px;">Punched in · <span class="mono">09:06 AM</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 Leave -->
+  <section class="scene" id="s4">
+    <div class="feat">
+      <div class="copy">
+        <span class="eyebrow"><i>2</i>Leave</span>
+        <h2>Leave requests, approved in one tap.</h2>
+        <p>Half day, WFH, short leave. Attendance updates on its own.</p>
+      </div>
+      <div class="visual">
+        <figure class="leaves-shot" style="margin:0">
+          <img src="img/app-leaves.webp" alt="" width="1156" height="2000">
+          <span class="ov av1">RS</span><span class="ov nm n1">Riya Sharma</span><span class="ov rs r1">Working from home today, the internet technician is coming…</span>
+          <span class="ov av2">AM</span><span class="ov nm n2">Aman Malik</span><span class="ov rs r2">Need a half day for a doctor's appointment…</span>
+        </figure>
+        <div class="lcard">
+          <span class="t">New leave request</span>
+          <b>Pooja · Short Leave · Tomorrow 4–6 PM</b>
+          <div class="acts">
+            <div class="btn yes"><span class="y1">Approve</span><span class="y2" style="opacity:0">Approved ✓</span><i class="tap"></i></div>
+            <div class="btn no">Reject</div>
+          </div>
+        </div>
+        <div class="chip toast"><span class="dot"></span>Attendance updated</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 Dashboard -->
+  <section class="scene" id="s5">
+    <div class="feat">
+      <div class="copy">
+        <span class="eyebrow"><i>3</i>Live dashboard</span>
+        <h2>Your whole office, at a glance.</h2>
+        <p>Who's in, who's late, who's on leave. On your phone or laptop, from anywhere.</p>
+      </div>
+      <div class="visual">
+        <div class="dash">
+          <div class="dash-top"><h3>Today's attendance</h3><span class="mono">Thu · 10:35 AM</span></div>
+          <div class="tally">
+            <div class="t-ok"><b class="num" data-to="18">18</b>Present</div>
+            <div class="t-warn"><b class="num" data-to="2">2</b>Late</div>
+            <div class="t-info"><b class="num" data-to="3">3</b>WFH</div>
+            <div class="t-bad"><b class="num" data-to="1">1</b>Leave</div>
+          </div>
+          <div>
+            <div class="row"><span class="av">RS</span><span class="who"><b>Riya Sharma</b><span>09:02 AM · Office</span></span><span class="pill c-ok">Present</span></div>
+            <div class="row"><span class="av">KV</span><span class="who"><b>Karan Verma</b><span>10:28 AM · Office</span></span><span class="pill c-warn">Late</span></div>
+            <div class="row"><span class="av">AM</span><span class="who"><b>Aman Malik</b><span>09:10 AM · Remote</span></span><span class="pill c-info">WFH</span></div>
+            <div class="row"><span class="av">NJ</span><span class="who"><b>Neha Joshi</b><span>Till 2:00 PM</span></span><span class="pill c-acc">Half Day</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6 Month end -->
+  <section class="scene" id="s6">
+    <div class="feat">
+      <div class="copy">
+        <span class="eyebrow"><i>4</i>Month end</span>
+        <h2>Salary-ready reports. No calculator.</h2>
+        <p>Every day counted for every employee. Download as CSV in one click.</p>
+      </div>
+      <div class="visual">
+        <div class="month">
+          <div class="month-head"><h3>Rahul Mehta · November</h3><span class="csv">↓ CSV</span></div>
+          <div class="cal" id="cal"></div>
+          <div class="sum">
+            <div><b class="num" data-to="15">15</b>Present</div>
+            <div><b class="num" data-to="1">1</b>Leave</div>
+            <div><b class="num" data-to="1">1</b>Half Day</div>
+            <div><b class="num" data-to="1">1</b>WFH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7 Outro -->
+  <section class="scene" id="s7">
+    <div class="words"><span>Attendance.</span><span>Leave.</span><span>Salary.</span></div>
+    <div class="end">
+      <img src="dune-logo.svg" alt="DUNE" width="134" height="36">
+      <div class="line">Built for offices with 10–50 people.</div>
+      <div><span class="cta">Try free <span class="mono">dune.dyzo.ai</span></span></div>
+      <div class="stores">
+        <span class="store"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.2c-.3.3-.4.7-.4 1.2v17.2c0 .5.1.9.4 1.2l9.6-9.8L3.6 2.2zm10.8 9.6 2.9-3L5.2 1.9c-.4-.2-.8-.2-1.1-.1l10.3 10zm0 .4-10.3 10c.3.1.7.1 1.1-.1l12.1-6.9-2.9-3zm6.3-3.3-2.7-1.6-3.1 3.1 3.1 3.1 2.7-1.6c.8-.5.8-1.6 0-2.1z"/></svg><span>Get it on<b>Google Play</b></span></span>
+        <span class="store"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM13.9 4.9c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg><span>Download on the<b>App Store</b></span></span>
+      </div>
+    </div>
+  </section>
+
+  <div id="wipe"><img src="dune-logo.svg" alt=""></div>
+  <div id="fade"></div>
+  <div class="progress" id="progress"></div>
+</div>
+<div class="hint">Click the video to pause / play</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function () {
+  const params = new URLSearchParams(location.search);
+  if (params.has('rec')) document.body.classList.add('rec');
+
+  // Fit 1920×1080 stage to the window
+  const stage = document.getElementById('stage');
+  function fit() {
+    const s = Math.min(innerWidth / 1080, innerHeight / 1920);
+    stage.style.transform = 'scale(' + s + ')';
+    stage.style.margin = ((1920 * s - 1920) / 2) + 'px ' + ((1080 * s - 1080) / 2) + 'px';
+  }
+  addEventListener('resize', fit); fit();
+
+  // Calendar cells for scene 6
+  const kinds = {1:'w',7:'w',8:'w',14:'w',15:'w',21:'w',22:'w',28:'w',29:'w',9:'h',10:'h',11:'h',17:'l',23:'hd',24:'wfh'};
+  const cal = document.getElementById('cal');
+  for (let d = 1; d <= 30; d++) {
+    const i = document.createElement('i'); i.className = 'd-' + (kinds[d] || 'p'); i.textContent = d; cal.appendChild(i);
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.4, defaults: { ease: 'power3.out' },
+    onUpdate: () => { document.getElementById('progress').style.width = (tl.progress() * 100) + '%'; } });
+  window.tl = tl;
+  gsap.set('#wipe', { x: 0, xPercent: -100, visibility: 'visible' });
+
+  function cut(from, to, at) {
+    tl.fromTo('#wipe', { xPercent: -100 }, { xPercent: 0, duration: 0.42, ease: 'power3.in' }, at)
+      .set(from, { autoAlpha: 0 }, at + 0.42)
+      .set(to, { autoAlpha: 1 }, at + 0.42)
+      .to('#wipe', { xPercent: 100, duration: 0.5, ease: 'power3.out' }, at + 0.42);
+  }
+  function count(sel, at, dur) {
+    document.querySelectorAll(sel).forEach(el => {
+      tl.fromTo(el, { textContent: 0 }, { textContent: +el.dataset.to, snap: { textContent: 1 }, duration: dur, ease: 'power2.out' }, at);
+    });
+  }
+  function copyIn(scene, T) {
+    tl.from(scene + ' .eyebrow', { y: 30, opacity: 0, duration: 0.6 }, T + 0.1)
+      .from(scene + ' h2', { y: 60, opacity: 0, duration: 0.8 }, T + 0.2)
+      .from(scene + ' .copy p', { y: 40, opacity: 0, duration: 0.7 }, T + 0.4);
+  }
+
+  // S1 intro (0 → 3.6)
+  tl.set('#s1', { autoAlpha: 1 }, 0)
+    .fromTo('#s1 .logo-big', { clipPath: 'inset(0 100% 0 0)', scale: 0.86, filter: 'blur(14px)' },
+      { clipPath: 'inset(0 0% 0 0)', scale: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power4.inOut' }, 0.15)
+    .from('#s1 .tag span', { yPercent: 120, opacity: 0, stagger: 0.12, duration: 0.7 }, 1.05)
+    .from('#s1 .sub', { y: 24, opacity: 0, duration: 0.6 }, 1.7)
+    .to('#s1 .wrap', { scale: 1.06, duration: 3, ease: 'none' }, 0.6);
+  cut('#s1', '#s2', 3.6);
+
+  // S2 register (4 → 9.1)
+  let T = 4;
+  tl.from('#s2 .paper', { y: 120, rotate: -12, opacity: 0, duration: 0.9 }, T)
+    .from('#s2 .hl', { clipPath: 'inset(0 100% 0 0)', duration: 0.55, stagger: 0.3, ease: 'none' }, T + 0.5)
+    .from('#s2 .q', { y: 50, opacity: 0, duration: 0.7 }, T + 0.35)
+    .fromTo('#s2 .strike', { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: 'power2.inOut' }, T + 2.4)
+    .to('#s2 .paper', { rotate: -2, x: 10, duration: 0.15, yoyo: true, repeat: 1 }, T + 2.85)
+    .to('#s2 .q', { y: -50, opacity: 0, duration: 0.4, ease: 'power2.in' }, T + 3.0)
+    .from('#s2 .a', { y: 60, opacity: 0, duration: 0.7 }, T + 3.3)
+    .to('#s2 .paper', { x: -260, y: 60, rotate: -18, opacity: 0, duration: 0.8, ease: 'power2.in' }, T + 4.2);
+  cut('#s2', '#s3', 9.1);
+
+  // S3 check-in (9.5 → 15.6)
+  T = 9.5;
+  copyIn('#s3', T);
+  tl.from('#s3 .phone-img', { y: 420, rotate: 8, opacity: 0, duration: 1.2, ease: 'expo.out' }, T + 0.15)
+    .to('#s3 .phone-img', { scale: 1.05, duration: 4.5, ease: 'none' }, T + 1.3)
+    .from('#s3 .ring', { scale: 0, opacity: 0, duration: 0.5, ease: 'back.out(2)' }, T + 1.5)
+    .from('#s3 .c1', { x: -60, scale: 0.7, opacity: 0, duration: 0.6, ease: 'back.out(1.8)' }, T + 1.8)
+    .from('#s3 .c2', { x: 60, scale: 0.7, opacity: 0, duration: 0.6, ease: 'back.out(1.8)' }, T + 2.4);
+  cut('#s3', '#s4', 15.6);
+
+  // S4 leave (16 → 22.1)
+  T = 16;
+  copyIn('#s4', T);
+  tl.from('#s4 .leaves-shot', { y: 420, rotate: -6, opacity: 0, duration: 1.2, ease: 'expo.out' }, T + 0.15)
+    .from('#s4 .lcard', { x: -120, opacity: 0, duration: 0.8, ease: 'back.out(1.4)' }, T + 1.3)
+    .fromTo('#s4 .tap', { scale: 0, opacity: 0.8 }, { scale: 2.6, opacity: 0, duration: 0.7, ease: 'power2.out' }, T + 2.7)
+    .to('#s4 .yes', { scale: 0.94, duration: 0.12, yoyo: true, repeat: 1 }, T + 2.7)
+    .to('#s4 .yes', { backgroundColor: '#1F8A5B', duration: 0.25 }, T + 2.85)
+    .to('#s4 .y1', { opacity: 0, duration: 0.15 }, T + 2.85)
+    .to('#s4 .y2', { opacity: 1, duration: 0.2 }, T + 2.95)
+    .from('#s4 .toast', { y: 40, scale: 0.8, opacity: 0, duration: 0.6, ease: 'back.out(1.8)' }, T + 3.3);
+  cut('#s4', '#s5', 22.1);
+
+  // S5 dashboard (22.5 → 28.1)
+  T = 22.5;
+  copyIn('#s5', T);
+  tl.from('#s5 .dash', { y: 140, scale: 0.92, opacity: 0, duration: 1.0, ease: 'expo.out' }, T + 0.15)
+    .from('#s5 .tally div', { y: 30, opacity: 0, stagger: 0.08, duration: 0.5 }, T + 0.7)
+    .from('#s5 .row', { x: 60, opacity: 0, stagger: 0.14, duration: 0.55 }, T + 1.4)
+    .to('#s5 .row:nth-child(2) .pill', { scale: 1.15, duration: 0.25, yoyo: true, repeat: 3 }, T + 2.8);
+  count('#s5 .num', T + 0.8, 1.4);
+  cut('#s5', '#s6', 28.1);
+
+  // S6 month end (28.5 → 34.1)
+  T = 28.5;
+  copyIn('#s6', T);
+  tl.from('#s6 .month', { y: 140, scale: 0.92, opacity: 0, duration: 1.0, ease: 'expo.out' }, T + 0.15)
+    .from('#s6 .cal i', { scale: 0, opacity: 0, duration: 0.35, stagger: 0.035, ease: 'back.out(2)' }, T + 0.8)
+    .from('#s6 .sum div', { y: 24, opacity: 0, stagger: 0.08, duration: 0.5 }, T + 1.9)
+    .fromTo('#s6 .csv', { scale: 1 }, { scale: 1.12, duration: 0.3, yoyo: true, repeat: 1, ease: 'power2.inOut' }, T + 3.4);
+  count('#s6 .num', T + 2.0, 1.0);
+  cut('#s6', '#s7', 34.1);
+
+  // S7 outro (34.5 → 41)
+  T = 34.5;
+  tl.from('#s7 .words span', { yPercent: 80, opacity: 0, stagger: 0.18, duration: 0.7 }, T + 0.1)
+    .to('#s7 .words', { scale: 0.7, opacity: 0, filter: 'blur(10px)', duration: 0.6, ease: 'power2.in' }, T + 1.9)
+    .from('#s7 .end img', { scale: 0.7, opacity: 0, filter: 'blur(12px)', duration: 0.9, ease: 'expo.out' }, T + 2.4)
+    .from('#s7 .end .line', { y: 24, opacity: 0, duration: 0.6 }, T + 2.9)
+    .from('#s7 .end .cta', { y: 30, scale: 0.85, opacity: 0, duration: 0.7, ease: 'back.out(1.6)' }, T + 3.2)
+    .from('#s7 .end .store', { y: 24, opacity: 0, stagger: 0.12, duration: 0.5 }, T + 3.6)
+    .to('#fade', { opacity: 1, duration: 0.5 }, 41)
+    .set('#s7', { autoAlpha: 0 }, 41.5);
+
+  if (reduce) tl.pause(37.5);
+  if (params.has('t')) tl.pause(+params.get('t'));
+
+  stage.addEventListener('click', () => tl.paused() ? tl.play() : tl.pause());
+})();
+</script>
+</body>
+</html>

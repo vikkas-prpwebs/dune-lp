@@ -1,0 +1,6 @@
+{
+  "name": "dune-video-tools",
+  "private": true,
+  "description": "Records product-video pages to MP4 (needs Google Chrome and ffmpeg)",
+  "dependencies": { "puppeteer-core": "23.11.1" }
+}
